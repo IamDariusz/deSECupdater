@@ -79,12 +79,16 @@ func paramCheck(token, domain, ipwan string) (bool, string) {
 func main() {
 	desecToken := flag.String("token", "XXX", "token for DESEC's API")
 	desecDomain := flag.String("domain", "domain.com", "domain to change IP for")
+	desecIP := flag.String("ip", "", "IPv4 address to use, will automatically use WAN IP if empty")
 	desecDbg := flag.Bool("debug", false, "debug desec call's body")
 	flag.Parse()
 
-	log.Printf("Trying to get IP address...")
-	wanIP := getIP()
-	log.Printf("Got IP Address: %v", wanIP)
+	wanIP := *desecIP
+	if *desecIP == "" {
+		log.Printf("Trying to get IP address...")
+		wanIP = getIP()
+		log.Printf("Got IP Address: %v", wanIP)
+	}
 
 	// Check Parameters
 	log.Printf("Verifying Parameters and IP...")
