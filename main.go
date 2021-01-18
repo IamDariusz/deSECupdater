@@ -39,10 +39,14 @@ func getIP() string {
 	return fmt.Sprintf("%v", ipify.IP)
 }
 
-func setDNS(token, domain, ipwan string) (int, string) {
+func setDNS(token, domain, subdomain, ipwan string) (int, string) {
 	jsonStr := []byte(fmt.Sprintf(`{"records": ["%v"]}`, ipwan))                      // create body
 	deSecURL := fmt.Sprintf("https://desec.io/api/v1/domains/%v/rrsets/@/A/", domain) // create domain
-	req, err := http.NewRequest("PATCH", deSecURL, bytes.NewBuffer(jsonStr))          // new patch request
+	if subdomain != "" {
+		deSecURL = fmt.Sprintf("https://desec.io/api/v1/domains/%v/rrsets/%v/A/", domain, subdomain) // create domain
+		fmt.Printf("%v", deSecURL)
+	}
+	req, err := http.NewRequest("PATCH", deSecURL, bytes.NewBuffer(jsonStr)) // new patch request
 	if err != nil {
 		log.Fatalf("Error on creating new request: %v\n", err)
 	}
@@ -77,10 +81,11 @@ func paramCheck(token, domain, ipwan string) (bool, string) {
 }
 
 func main() {
-	desecToken := flag.String("token", "XXX", "token for DESEC's API")
-	desecDomain := flag.String("domain", "domain.com", "domain to change IP for")
-	desecIP := flag.String("ip", "", "IPv4 address to use, will automatically use WAN IP if empty")
-	desecDbg := flag.Bool("debug", false, "debug desec call's body")
+	desecToken := flag.String("token", "", "token for DESEC's API")
+	desecDomain := flag.String("domain", "", "domain to change IP for")
+	desecSubdomain := flag.String("subdomain", "", "subdomain to change IP for")
+	desecIP := flag.String("ip", "", "IPv4 address to use")
+	desecDbg := flag.Bool("debug", true, "debug desec call's body")
 	flag.Parse()
 
 	wanIP := *desecIP
@@ -103,7 +108,7 @@ func main() {
 	setRetry := 1
 	for setRetry <= 10 {
 		log.Printf("Try number: %v", setRetry)
-		desecStatus, desecBody := setDNS(*desecToken, *desecDomain, wanIP)
+		desecStatus, desecBody := setDNS(*desecToken, *desecDomain, *desecSubdomain, wanIP)
 		if desecStatus != 200 {
 			log.Printf("Was not successful. Got status code: %v", desecStatus)
 			log.Printf("Will retry in 5s")
