@@ -85,7 +85,7 @@ func main() {
 	desecDomain := flag.String("domain", "", "domain to change IP for")
 	desecSubdomain := flag.String("subdomain", "", "subdomain to change IP for")
 	desecIP := flag.String("ip", "", "IPv4 address to use")
-	desecDbg := flag.Bool("debug", true, "debug desec call's body")
+	desecDbg := flag.Bool("debug", false, "debug desec call's body")
 	flag.Parse()
 
 	wanIP := *desecIP
