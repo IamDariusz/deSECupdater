@@ -95,14 +95,23 @@ func main() {
 	log.Printf("Parameters seem to be valid!")
 
 	log.Printf("Try to set DESEC DNS Settings...")
-	desecStatus, desecBody := setDNS(*desecToken, *desecDomain, wanIP)
-	if desecStatus != 200 {
-		log.Printf("Was not successful. Got status code: %v", desecStatus)
-	} else {
-		log.Printf("Was successful. Got status code: %v", desecStatus)
-	}
 
-	if *desecDbg {
-		log.Printf("DEBUG Got body: %v", desecBody)
+	setRetry := 1
+	for setRetry <= 10 {
+		log.Printf("Try number: %v", setRetry)
+		desecStatus, desecBody := setDNS(*desecToken, *desecDomain, wanIP)
+		if desecStatus != 200 {
+			log.Printf("Was not successful. Got status code: %v", desecStatus)
+			log.Printf("Will retry in 5s")
+			time.Sleep(5 * time.Second)
+		} else {
+			log.Printf("Was successful. Got status code: %v", desecStatus)
+			setRetry = 11
+		}
+		if *desecDbg {
+			log.Printf("DEBUG Got body: %v", desecBody)
+		}
+
+		setRetry = setRetry + 1
 	}
 }
