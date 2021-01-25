@@ -17,5 +17,9 @@ subdomain | The subdomain under the main domain you want to change (e.g. "mysubd
 token | The access token you get from deSEC under "Token Management" (is 28 chars long)
 ip | The IPv4 address to use, if not used the script will determine the WAN's IPv4 address automatically via [ipify](https://www.ipify.org).
 
-Example usage:
+## Example usage
+Update a subdomain with a defined IP address:
 > updater.exe -domain "domain.one" -subdomain "mail" -token "XXXXXXXXXXXXXXXXXXXXXXXXXXXX" -ip "123.123.123.123"
+
+Update a domain with the WAN IP where the application is executed:
+> updater.exe -domain "domain.one" -token "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
