@@ -12,7 +12,10 @@ Developed according to [deSEC's API documentation](https://desec.readthedocs.io/
 ## Parameters
 Parameter | Expected Input
 ------------ | -------------
--domain | The domain you want to change (e.g. "domain.one")
--subdomain | The subdomain under the main domain you want to change (e.g. "mysubdomain")
--token | The access token you get from deSEC under "Token Management" (is 28 chars long)
--ip | The IPv4 address to use, if not used the script will determine the WAN's IPv4 address automatically via [ipify](https://www.ipify.org).
+domain | The domain you want to change (e.g. "domain.one")
+subdomain | The subdomain under the main domain you want to change (e.g. "mysubdomain")
+token | The access token you get from deSEC under "Token Management" (is 28 chars long)
+ip | The IPv4 address to use, if not used the script will determine the WAN's IPv4 address automatically via [ipify](https://www.ipify.org).
+
+Example usage:
+> updater.exe -domain "domain.one" -subdomain "mail" -token "XXXXXXXXXXXXXXXXXXXXXXXXXXXX" -ip "123.123.123.123"
